@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALB + RDS</title>
+    <style>
+        /* Reset and clean up standard layout styles */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background-color: #f4f7f6; 
+            color: #333333; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 20px;
+        }
+
+        .card { 
+            background: #ffffff; 
+            padding: 40px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); 
+            width: 100%; 
+            max-width: 500px; 
+            text-align: center;
+        }
+
+        /* Server Metadata Area */
+        .server-info { 
+            background-color: #f8fafc; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 12px; 
+            padding: 20px; 
+            margin-bottom: 30px; 
+            text-align: left; 
+        }
+
+        .info-row { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 8px; 
+            font-size: 14px;
+        }
+        
+        .info-row:last-child { margin-bottom: 0; }
+        
+        .label { color: #64748b; font-weight: 500; }
+        .value { color: #0f172a; font-family: monospace; font-weight: bold; }
+
+        /* Form styling */
+        h2 { font-size: 22px; color: #1e293b; margin-bottom: 24px; font-weight: 600; }
+        
+        .form-group { display: flex; flex-direction: column; gap: 12px; }
+        
+        input[type="text"] { 
+            padding: 14px 16px; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            outline: none; 
+            transition: border-color 0.2s; 
+        }
+        
+        input[type="text"]:focus { border-color: #3b82f6; }
+
+        input[type="submit"] { 
+            padding: 14px; 
+            background-color: #2563eb; 
+            color: #ffffff; 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: background-color 0.2s; 
+        }
+        
+        input[type="submit"]:hover { background-color: #1d4ed8; }
+
+        /* Alerts and response notification bubbles */
+        .status-message { 
+            margin-top: 24px; 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-size: 14px; 
+            font-weight: 500; 
+        }
+        
+        .success { background-color: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+        .error { background-color: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <!-- Live Cloud Server Details -->
+        <div class="server-info">
+            <div class="info-row">
+                <span class="label">Instance ID:</span>
+                <span class="value">{{ instance_id }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Availability Zone:</span>
+                <span class="value">{{ az }}</span>
+            </div>
+        </div>
+
+        <h2>Relation Database</h2>
+        
+        <!-- Application input action route -->
+        <form action="/submit" method="POST" class="form-group">
+            <input type="text" name="user_data" placeholder="Type a message or name..." required>
+            <input type="submit" value="Save to Database">
+        </form>
+
+        <!-- Status alerts showing transaction success/failures -->
+        {% if message %}
+            <div class="status-message {% if 'Successfully' in message %}success{% else %}error{% endif %}">
+                {{ message }}
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
