@@ -27,7 +27,7 @@ def get_aws_metadata():
 # Helper function to connect to your AWS RDS MySQL Instance
 def get_db_connection():
     db = mysql.connector.connect(
-        host="://amazonaws.com",  # <-- PASTE YOUR RDS ENDPOINT HERE
+        host="127.0.0.1",  # <-- PASTE YOUR RDS ENDPOINT HERE
         user="root",                                  # Your RDS Master Username
         password="password123"                        # Your RDS Master Password
     )
